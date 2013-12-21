@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="imsjob" default="build" basedir=".">
+  <property name="WS_HOME" value="D:\apache-tomcat-7.0.39\webapps\LabTask11-server\WEB-INF\lib"/>
+  <property name="encoding" value="UTF-8"/>
+  <path id="xbean.classpath">
+    <fileset dir="${WS_HOME}">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+    <taskdef name="xmlbean" classname="org.apache.xmlbeans.impl.tool.XMLBean" classpathref="xbean.classpath" />
+      <target name="init">
+    <echo message="Start init"/>
+  </target>
+    <target name="build" depends="init">
+    <xmlbean schema="NewsService.xsd" destfile="lib\newssoap.jar" classpathref="xbean.classpath"/>    
+  </target>
+</project>

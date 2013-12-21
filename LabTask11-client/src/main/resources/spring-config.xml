@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:sws="http://www.springframework.org/schema/web-services"
+	xmlns:oxm="http://www.springframework.org/schema/oxm"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+    http://www.springframework.org/schema/web-services
+    http://www.springframework.org/schema/web-services/web-services-2.0.xsd
+    http://www.springframework.org/schema/oxm
+    http://www.springframework.org/schema/oxm/spring-oxm-1.5.xsd
+    ">
+	<bean
+		name="/newslist /newsedit /newsview /cancel /error /lang /list /view /edit /save /delete"
+		id="newsAction" class="com.epam.taskeleven.client.presentation.action.NewsAction"
+		scope="singleton">
+		<property name="newsFacade" ref="newsFacade" />
+		<property name="gson" ref="gson" />
+	</bean>
+
+	<bean id="gson" class="com.google.gson.Gson">
+	</bean>
+
+	<bean id="newsFacade"
+		class="com.epam.taskeleven.client.presentation.facade.NewsFacadeImpl" init-method="initLogging">
+		<property name="webServiceTemplate" ref="webServiceTemplate"/>
+	</bean>
+
+	<bean id="webServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate"
+		p:marshaller-ref="jaxbMarshaller" p:unmarshaller-ref="jaxbMarshaller"
+		p:defaultUri="http://localhost:8180/LabTask11-server/NewsService"
+		p:messageSender-ref="messageSender">
+		<constructor-arg ref="messageFactory" />
+	</bean>
+
+	<bean id="messageSender"
+		class="org.springframework.ws.transport.http.CommonsHttpMessageSender" />
+
+	<bean id="messageFactory" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory" />
+
+	<bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller"
+		p:contextPath="com.epam.taskeleven.server.soap" />
+</beans>
